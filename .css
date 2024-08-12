@@ -1,0 +1,17 @@
+table, th, td {
+ border: 1px solid black;
+ border-collapse: collapse;
+ padding: 5px;
+}
+
+.code {
+  font-family: monospace;
+  font: Fantasque Sans Mono;
+  font-size: 14px;
+  color: white;
+  background: gray;
+  padding: 0px 4px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  width: 75%;
+}

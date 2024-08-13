@@ -1,7 +1,5 @@
 <?php
 	$conditions='';
-	$varcount=0;
-	$newlines=0;
 	$attributes = array('Name', 'Base', 'OSType', 'Category', 'Arch', 'Status', 'DefaultInterface', 'DE',
 		'ReleasedYear', 'InstallSize', 'ReleaseModel', 'PackageManagement', 'InitSystem', 'ImageType');
 	$heads = array('Name', 'Base', 'OS Type', 'Category', 'Architecture', 'Status', 'Default Interface',
@@ -36,43 +34,35 @@
 				if($_POST[strtolower($attr)] != null){
 					$filters = $_POST[strtolower($attr)];
 					foreach ($filters as $filter)
-						if($filter == $filters[count($filters)-1]){
+						if($filter == $filters[count($filters)-1])
 							$conditions .= "$attr='".$filter."') and (";
-							$print_conditions .= "$attr='".$filter."') and \n(";
-							$newline++;
-						}else{
+						else
 							$conditions .= "$attr='".$filter."' or ";
-							$print_conditions .= "$attr='".$filter."' or ";
-							if ($varcount >= 6){
-								$varcount = 0;
-								$print_conditions .= "\n ";
-								$newline++;
-							}else
-								$varcount++;
-						}
 				}
 			$query = "Select * from DistroDB.Distroes where ($conditions;";
-			$query_print = "Select * from DistroDB.Distroes where\n($print_conditions;";
 			$sql_query = str_replace(') and (;',');',$query);
-			$sql_query_print = str_replace(") and \n(;",');',$query_print);
 			$sql_query_count = str_replace('*','count(*) as totalcount',$sql_query);
 			echo "<h2> Query </h2>";
-			$pretty_print = shell_exec("echo \"$sql_query_print\" | pygmentize -l mysql -f html");
+			$sed_cmd = "sed 's/ or / or\\n\\t/g; s/where (/where (\\n\\t/g; s/) and (/\\n) and (\\n\\t/g;";
+			$sed_cmd = $sed_cmd." s/);/\\n);/g;'";
+			$shell_cmd = "echo \"$sql_query\" | $sed_cmd | pygmentize -l mysql -f html";
+			$pretty_print = shell_exec($shell_cmd);
+			$newline = shell_exec("$shell_cmd | wc -l");
 			echo "<div class=\"code\"> $pretty_print </div>";
 			if ($sql_query != 'Select * from DistroDB.Distroes where (;'){
 				foreach ($connection->query($sql_query_count) as $row)
 				$totalcount = $row['totalcount'];
 			}
 			if ($sql_query == 'Select * from DistroDB.Distroes where (;'){
-				echo "<br/><br/><br/><center><h1> Result <br/><br/> NULL </h1></center>";
+				echo "<br/><br/><br/><br/><br/><center><h1> Result <br/><br/> NULL </h1></center>";
 			}else if ($totalcount == 0){
 				for($i=0; $i<$newline; $i++)
 					echo "<br/>";
-				echo "<br/><br/><br/><center><h1> Result <br/><br/> NULL </h1></center>";
+				echo "<br/><center><h1> Result <br/><br/> NULL </h1></center>";
 			}else{
 				for($i=0; $i<$newline; $i++)
 					echo "<br/>";
-				echo '<br/><br/><br/><center><table>';
+				echo '<br/><center><table>';
 				echo '<tr colspan=\"14\"><center><h1> Result </h1></center></tr>';
 				echo '<tr>';
 				foreach ($heads as $head){

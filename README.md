@@ -55,5 +55,6 @@ http://localhost:8080/
 
 #### Example
 Select the Choices and Click on `submit`
-![image](ld1.png){: padding:20px;}
+&nbsp;&nbsp;
+![image](ld1.png)
 ![image](ld2.png)

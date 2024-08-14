@@ -12,7 +12,7 @@ The Distribution with following features
 <pre>
 * OS Type           - Linux, BSD or Other
 * Based on          - FreeBSD or Arch
-* Default Interface - Desktop or TTY
+* Default Interface - Desktop
 </pre>
 
 ##### SQL query
@@ -52,6 +52,7 @@ Open your browser (chromium) and go to
 ```
 http://localhost:8080/
 ```
+
 #### Example
 Select the Choices and Click on submit
 ![image](ld1.png)
